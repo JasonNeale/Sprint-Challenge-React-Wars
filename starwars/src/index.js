@@ -1,6 +1,12 @@
+// Package Imports
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 
+// File Imports
+import './index.css';
+
+// Component Imports
+import App from './compApp';
+
+// Render
 ReactDOM.render(<App />, document.getElementById('root'));
