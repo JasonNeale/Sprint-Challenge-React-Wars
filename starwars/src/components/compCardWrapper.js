@@ -83,16 +83,19 @@ const CardBottomRowBtnCSS = styled.a`
 
 const CardWrapperData = () => {
     const [SWAPI, setSWAPI] = useState([])
-    // const [SWAPIPrev, setSWAPIPrev] = useState([])
-    // const [SWAPINext, setSWAPINext] = useState([])
+    const [SWAPIPrev, setSWAPIPrev] = useState('')
+    const [SWAPINext, setSWAPINext] = useState('')
+    const [apiUrl, setApiUrl] = useState('https://swapi.co/api/people/')
 
     useEffect(() => {
-        axios.get(`https://swapi.co/api/people/`)
-        .then(res => {setSWAPI(res.data.results)})
+        axios.get(apiUrl)
+            .then(res => {
+                setSWAPI(res.data.results)
+                setSWAPINext(res.data.next)
+                setSWAPIPrev(res.data.previous)
+            })
         .catch(err => { console.log("Axios Error:", err); });
-    }, []);
-        
-    console.log('SWAPI Results', SWAPI)
+    }, apiUrl);
 
     return (
         <CardWrapperCSS>
@@ -101,22 +104,20 @@ const CardWrapperData = () => {
                     <PageTitle>SWAPI Results</PageTitle>
                 </PageTitleLeft>
                 <PageTitleRight>
-                    <PageTitleSearch id="filter-input" name="filter-input" placeholder="Filter Results..."/>
+                    <PageTitleSearch type="text" id="filter-input" name="filter-input" placeholder="Filter Results By Name..."/>
                 </PageTitleRight>
             </PageTitleWrapper>
             <PageContentWrapper>
                 {SWAPI.map(item => {
-                    return <People key={item} data={item}/>
+                    return <People key={item.url} data={item}/>
                 })}
             </PageContentWrapper>
+
             <CardBottomRowCSS>
-                {
-                /*
-                <CardBottomRowBtnCSS>Previous</CardBottomRowBtnCSS>
-                <CardBottomRowBtnCSS>Next</CardBottomRowBtnCSS>
-                */    
-                }
+                <CardBottomRowBtnCSS onClick={() => setApiUrl(SWAPIPrev)}>Previous</CardBottomRowBtnCSS>
+                <CardBottomRowBtnCSS onClick={() => setApiUrl(SWAPINext)}>Next</CardBottomRowBtnCSS>
             </CardBottomRowCSS>
+
         </CardWrapperCSS>
     )
 }
